@@ -1,0 +1,22 @@
+﻿@{ViewData["Title"] = "Home Page";}
+@model List<StudentApp.Models.Student>;
+
+
+<div class="text-center">
+    <a asp-action="IndexJSON" class="btn btn-primary">JSON</a>
+    <a asp-action="IndexContent" class="btn btn-primary">Oddiy content</a>
+    <h1 class="display-4">Students</h1>
+    @foreach (var student in Model){
+        <h3>
+            <a asp-action="Detail" asp-route-id="@student.Id">@student.Name</a>
+            <a asp-action="DetailJSON"asp-route-id="@student.Id" class="btn btn-primary">JSON</a>
+            <a asp-action="DetailContent"asp-route-id="@student.Id" class="btn btn-primary">Content</a>
+        </h3>
+    }
+
+    <a asp-action="DownloadFile" class="btn btn-primary">Faylni yuklash</a>
+    <a asp-action="Admin">Admin</a>
+</div>
+
+
+

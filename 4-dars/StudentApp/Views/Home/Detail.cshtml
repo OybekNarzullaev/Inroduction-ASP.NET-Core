@@ -1,0 +1,11 @@
+﻿@{ViewData["Title"] = "Home Page";}
+@model StudentApp.Models.Student;
+
+<a asp-action='Index' class="btn btn-primary">Ortga</a>
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Name</h1>
+    <h3 class="display-4">Id: @Model.Id</h3>
+    <h3 class="display-4">Yosh: @Model.Age</h3>
+    <h3 class="display-4">Yo'nalish: @Model.Major</h3>
+</div>
