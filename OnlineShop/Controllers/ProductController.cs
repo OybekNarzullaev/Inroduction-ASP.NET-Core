@@ -1,94 +1,80 @@
-using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Models;
 
 namespace OnlineShop.Controllers;
 
 public class ProductController : Controller
 {
-    private ProductRepository _repository;
+    private readonly ProductRepository _productRepository;
 
-    public ProductController(ProductRepository repository)
+    public ProductController(ProductRepository productRepository)
     {
-        _repository = repository;
+        _productRepository = productRepository;
     }
 
-    // List all products
-    public IActionResult Index()
+    public ActionResult Index()
     {
-        var products = _repository.GetAll();
-
+        var products = _productRepository.GetAll();
         return View(products);
     }
 
-    // View details of a product
-    public IActionResult Details(int id)
+    public ActionResult Details(int id)
     {
-        var product = _repository.Get(id);
+        var product = _productRepository.Get(id);
         if (product == null)
             return NotFound();
-
         return View(product);
     }
 
-    // Create a new product (GET)
-    public IActionResult CreateView()
+    public ActionResult CreateView()
     {
         return View();
     }
 
-    // Create a new product (POST)
     [HttpPost]
-    public IActionResult Create(Product product)
+    public ActionResult Create(Product newProduct)
     {
-        _repository.Create(product);
+        _productRepository.Create(newProduct);
         return RedirectToAction(nameof(Index));
     }
 
-    // Edit a product (GET)
-    public IActionResult EditView(int id)
+    public ActionResult EditView(int id)
+
     {
-        var product = _repository.Get(id);
+        var product = _productRepository.Get(id);
         if (product == null)
             return NotFound();
-
         return View(product);
     }
 
-    // Edit a product (POST)
     [HttpPost]
-    public IActionResult Edit(Product updatedProduct)
+    public ActionResult Edit(Product updatedProduct)
     {
-        int id = updatedProduct.Id;
-        var product = _repository.Get(id);
+        var id = updatedProduct.Id;
+        var product = _productRepository.Get(id);
         if (product == null)
+        {
+            Console.WriteLine(id);
             return NotFound();
+        }
 
-        _repository.Edit(id, updatedProduct);
-
+        _productRepository.Edit(id, updatedProduct);
         return RedirectToAction(nameof(Index));
     }
 
-    // Delete a product (GET)
-    public IActionResult DeleteView(int id)
+    public ActionResult DeleteView(int id)
     {
-        var product = _repository.Get(id);
+        var product = _productRepository.Get(id);
         if (product == null)
             return NotFound();
-
         return View(product);
     }
 
-    // Delete a product (POST)
     [HttpPost]
-    public IActionResult Delete(int id)
+    public ActionResult Delete(int id)
     {
-        var product = _repository.Get(id);
-        if (product == null)
-            return NotFound();
-
-        _repository.Delete(id);
-
+        _productRepository.Delete(id);
         return RedirectToAction(nameof(Index));
     }
 }

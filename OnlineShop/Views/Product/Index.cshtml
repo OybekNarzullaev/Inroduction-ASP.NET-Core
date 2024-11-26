@@ -1,27 +1,25 @@
+@* Product/Index.cshtml *@
+
 @model List<OnlineShop.Models.Product>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.Name</td>
-                <td>@product.Price</td>
-                <td>
-                    <a href="/Product/Details/@product.Id" class="btn btn-info">Details</a>
-                    <a href="/Product/EditView/@product.Id" class="btn btn-warning">Edit</a>
-                    <a href="/Product/DeleteView/@product.Id" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Product list</h2>
+    <a href="/Product/CreateView" class="btn btn-success">Qo'shish</a>
+</div>
 
-<a href="/Product/CreateView" class="btn btn-primary">Add Product</a>
+<div class="container p-3 d-flex justify-content-center flex-wrap gap-3">
+    @foreach(var product in Model) {
+        <div class="card" style="width: 18rem;">
+        <img class="card-img-top"  style="width: 18rem; height: 16rem; object-fit: contain;" src="@product.Image" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">@product.Name</h5>
+            <p class="card-text">@product.Description</p>
+            <div class="d-flex gap-1">
+            <a href="/Product/Details/@product.Id" class="btn btn-primary">Batafsil</a>
+            <a asp-action="EditView" asp-route-id="@product.Id" class="btn btn-warning">Tahrirlash</a>
+            <a href="/Product/DeleteView/@product.Id" class="btn btn-danger">O'chirish</a>
+            </div>
+        </div>
+        </div>
+    }   
+</div>

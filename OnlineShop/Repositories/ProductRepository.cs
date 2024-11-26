@@ -1,31 +1,32 @@
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Models;
 
 namespace OnlineShop.Repositories;
 
 public class ProductRepository
 {
-    private List<Product> _database = new List<Product>
+    private List<Product> _database = new List<Product>()
     {
-        new Product {
-            Id = 1,
-            Name = "Laptop",
-            Description = "Gaming Laptop",
-            Price = 1200,
-            Image = "https://www.hp.com/ca-en/shop/Html/Merch/Images/c08505208_500x367.jpg"
+        new Product() {
+            Id=1,
+            Name="HP laptop",
+            Description="new HP laptop in 2024; CPU Core i9; Ram:512 SSD...",
+            Price=1500,
+            Image = "https://www.hp.com/ca-en/shop/Html/Merch/Images/c08408264_390x286.jpg"
         },
-        new Product {
-            Id = 2,
-            Name = "Phone",
-            Description = "Smartphone",
-            Price = 800,
-            Image="https://joybox.uz/wp-content/uploads/2024/09/smartfon-apple-iphone-16-pro-256gb-global-desert-titanium.jpg"
-            },
-        new Product {
-            Id = 3,
-            Name = "Headphones",
-            Description = "Noise Cancelling",
-            Price = 200,
-            Image = "https://www.borofone.com/wp-content/uploads/2022/04/borofone-bo12-power-bt-headset-headphones.jpg"
+        new Product() {
+            Id=2,
+            Name="iPhone 16 pro Max",
+            Description="ultimate iPhone model in 2024",
+            Price=1700,
+            Image="https://www.nfm.com/dw/image/v2/BDFM_PRD/on/demandware.static/-/Sites-nfm-master-catalog/default/dw025ae98c/images/067/15/67153825-1.jpg?sw=1000&sh=1000&sm=fit"
+        },
+        new Product() {
+            Id=3,
+            Name="Ferrari toy",
+            Description="Toy model",
+            Price=100,
+            Image="https://i.ebayimg.com/images/g/5gEAAOSwRWRbThMO/s-l1200.jpg"
         }
     };
 
@@ -36,21 +37,24 @@ public class ProductRepository
 
     public Product? Get(int id)
     {
-        Product? product = _database.FirstOrDefault(p => p.Id == id);
-        if (product is null) return null;
+        var product = _database.FirstOrDefault(p => p.Id == id);
+        if (product == null)
+        {
+            return null;
+        }
         return product;
     }
 
-    public void Create(Product newProduct)
+    public void Create(Product product)
     {
         int Id = _database.Max(p => p.Id) + 1;
-        newProduct.Id = Id;
-        _database.Add(newProduct);
+        product.Id = Id;
+        _database.Add(product);
     }
 
     public void Edit(int id, Product updatedProduct)
     {
-        Product? product = _database.FirstOrDefault(p => p.Id == id);
+        var product = _database.FirstOrDefault(p => p.Id == id);
         if (product is not null)
         {
             product.Name = updatedProduct.Name;
@@ -58,16 +62,15 @@ public class ProductRepository
             product.Price = updatedProduct.Price;
             product.Image = updatedProduct.Image;
         }
-
     }
 
     public void Delete(int id)
     {
-        Product? product = _database.FirstOrDefault(p => p.Id == id);
+        var product = _database.FirstOrDefault(p => p.Id == id);
         if (product is not null)
         {
             _database.Remove(product);
         }
-
     }
+
 }
