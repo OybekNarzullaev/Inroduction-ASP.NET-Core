@@ -1,7 +1,19 @@
-@model OnlineShop.Models.Product
+@model OnlineShop.Models.Product;
 
-<img class="w-25" src="@Model.Image" alt="Image">
-<h2>@Model.Name</h2>
-<p>@Model.Description</p>
-<p>Price: $@Model.Price</p>
-<a href="/Product" class="btn btn-secondary">Back</a>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>ID: @Model.Id Nomi: @Model.Name</h2>
+        <a class="btn btn-primary" href="/Product">Ortga</a>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top"  
+            style="width: 18rem; height: 16rem; object-fit: contain;" 
+            src="@Model.Image" 
+            alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">@Model.Description</p>
+            <p class="card-text">$@Model.Price</p>
+        </div>
+    </div>
+</div>
