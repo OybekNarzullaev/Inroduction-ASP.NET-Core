@@ -1,0 +1,19 @@
+﻿@model List<MyApp.Models.Product>
+
+@{
+    ViewData["Title"] = "Products Page";
+}
+
+<div class="container">
+    @if(TempData["Message"]!=null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+        </div>
+    }
+    <a href="/Product/CreateView" class="btn btn-primary">Qo'shish</a>
+    @foreach(var product in Model)
+    {
+        <div>@product.Name</div>
+    }
+</div>
