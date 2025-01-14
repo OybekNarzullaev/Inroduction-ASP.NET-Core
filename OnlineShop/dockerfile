@@ -21,4 +21,4 @@ COPY --from=build /out .
 EXPOSE 5000
 
 # Configure the entry point
-ENTRYPOINT ["dotnet", "YourAppName.dll"]
+ENTRYPOINT ["dotnet", "OnlineShop.dll"]
