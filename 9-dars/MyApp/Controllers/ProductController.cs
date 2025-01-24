@@ -36,4 +36,55 @@ public class ProductController : Controller
         }
         return View(newProduct);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        return View(product);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit([Bind("Name,Price,Description,ImageUrl")] Product updatedProduct)
+    {
+        if (ModelState.IsValid)
+        {
+            int Id = updatedProduct.Id;
+            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == Id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            _dbContext.Update(updatedProduct);
+            await _dbContext.SaveChangesAsync();
+            TempData["message"] = $"'{updatedProduct.Name}' tahrirlandi";
+            return RedirectToAction(nameof(Index));
+        }
+        return View(updatedProduct);
+    }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+        return View(product);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(Product p)
+    {
+        var product = await _dbContext.Products.FirstOrDefaultAsync(product => product.Id == p.Id);
+        if (product != null)
+        {
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(product);
+    }
+
 }

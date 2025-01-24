@@ -13,6 +13,8 @@
             <p class="card-text">@product.Description</p>
             <p class="card-text">$ @product.Price.ToString().Split(",")[0]</p>
             <a href="#" class="btn btn-primary">Batafsil</a>
+            <a href="/Product/Edit/@product.Id" class="btn btn-warning">Tahrirlash</a>
+            <a href="/Product/Delete/@product.Id" class="btn btn-danger">O'chirish</a>
         </div>
     </div>
 }
