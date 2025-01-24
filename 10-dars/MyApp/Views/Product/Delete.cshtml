@@ -1,0 +1,10 @@
+@model MyApp.Models.Product;
+
+<form asp-action="Delete" method="post">
+    <h3>@Model.Name ni o'chirmoqchimisiz?</h3>
+    <input type="hidden" asp-for="Id">
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Ha</button>
+        <a href="/Product" class="btn btn-warning">Yo'q</a>
+    </div>
+</form>
