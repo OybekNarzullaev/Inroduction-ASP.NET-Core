@@ -1,0 +1,38 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-3 ml-0">Barcha maxsulotlar</h2>
+         @if(User.Identity.IsAuthenticated && (User.IsInRole("Seller")||User.IsInRole("Admin")))
+        {
+            <a asp-controller="Product" class="btn btn-success" asp-action="Create">Maxsulot qo'shish</a>
+        }
+    </div>
+    @if(TempData["Message"]!=null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+    <div class="d-flex justify-content-beetwen">
+    <ul class="list-group col-md-3 col-sm-12">
+        <a class="list-group-item @(Model.CategoryId == null ? "active" : "")" href="/">Barchasi</a>
+        @foreach (var c in Model.Categories)
+        {
+            <a class="list-group-item @(Model.CategoryId == c.Id ? "active" : "")" href="/?category=@c.Id">@c.Name</a>
+        }
+    </ul>
+        <div class="col-md-9 col-sm-12 px-3">
+            @if(Model.Products.Count()==0){
+                <h4>Maxsulotlar mavjud emas</h4> 
+            }
+            <div class="d-flex gap-3">
+                @foreach (var p in Model.Products)
+                {
+                    @await Html.PartialAsync("_ProductCart", p)
+                }
+            </div>
+        </div>
+    </div>
+</div>
