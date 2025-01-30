@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineMarket.Models;
 
@@ -26,6 +27,13 @@ public class Product
 
     // Navigation property
     public Category? Category { get; set; }
+
+    // Foreign Key Property
+    [ForeignKey("Seller")]
+    public string SellerId { get; set; } = string.Empty;
+
+    // Navigation Property
+    public User? Seller { get; set; }
 }
 
 

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineMarket.Models;
@@ -72,11 +73,22 @@ public class AuthController : Controller
     {
         if (ModelState.IsValid)
         {
+            var user = await _signInManager.UserManager.FindByNameAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Foydalanuvchi mavjud emas!");
+                return View(model);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
 
             if (result.Succeeded)
             {
+                var customClaims = new[] { new Claim(ClaimTypes.NameIdentifier, user.Id) };
+                await _signInManager.SignInWithClaimsAsync(user, false, customClaims);
+
+
                 TempData["Message"] = "Tizimga xush kelibsiz!";
 
                 return RedirectToAction("Index", "Product");
@@ -95,5 +107,10 @@ public class AuthController : Controller
         TempData["Message"] = "Tizimdan chiqdingiz";
 
         return RedirectToAction("Index", "Product");
+    }
+
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 }

@@ -1,4 +1,5 @@
 @model OnlineMarket.Models.Product
+@using System.Security.Claims
 
 <div class="card" style="width: 18rem;">
   <img class="card-img-top" src="@Url.Content("~/uploads/" + Model.ImagePath)" alt="Card image cap">
@@ -9,10 +10,13 @@
 
     <div class="d-flex gap-1">
         <a href="/Product/Details/@Model.Id" class="btn btn-primary">Ko'rish</a>
-        @if(User.Identity.IsAuthenticated && (User.IsInRole("Seller")||User.IsInRole("Admin")))
+        @if(User.Identity.IsAuthenticated)
         {
-          <a href="/Product/Edit/@Model.Id" class="btn btn-warning">Tahrirlash</a>
-          <a href="/Product/Delete/@Model.Id" class="btn btn-danger">O'chirish</a>
+          if(User.FindFirstValue(ClaimTypes.NameIdentifier)==Model.SellerId||User.IsInRole("Admin"))
+          {
+            <a href="/Product/Edit/@Model.Id" class="btn btn-warning">Tahrirlash</a>
+            <a href="/Product/Delete/@Model.Id" class="btn btn-danger">O'chirish</a>
+          }
         }
     </div>
   </div>
