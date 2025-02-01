@@ -25,7 +25,7 @@ public class ProductController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,ImageUrl")] Product newProduct)
+    public async Task<IActionResult> Create([Bind("Name,Price,Description,ImageUrl")] Product newProduct)
     {
         if (ModelState.IsValid)
         {
@@ -50,16 +50,11 @@ public class ProductController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit([Bind("Name,Price,Description,ImageUrl")] Product updatedProduct)
+    public async Task<IActionResult> Edit([Bind("Id, Name,Price,Description,ImageUrl")] Product updatedProduct)
     {
         if (ModelState.IsValid)
         {
-            int Id = updatedProduct.Id;
-            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == Id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+
             _dbContext.Update(updatedProduct);
             await _dbContext.SaveChangesAsync();
             TempData["message"] = $"'{updatedProduct.Name}' tahrirlandi";
