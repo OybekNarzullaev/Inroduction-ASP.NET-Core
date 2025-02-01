@@ -20,10 +20,16 @@ namespace OnlineMarket.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] int? category)
+        public async Task<IActionResult> GetAll([FromQuery] int? category, string? search)
         {
             var products = await _context.Products
-                .Where(p => !category.HasValue || p.CategoryId == category)
+                .Where(p =>
+                        (!category.HasValue || p.CategoryId == category) &&
+                        (
+                            string.IsNullOrEmpty(search) || (p.Name != null &&
+                            p.Name.ToLower().Contains(search.ToLower()))
+                        )
+                )
                 .ToListAsync();
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
