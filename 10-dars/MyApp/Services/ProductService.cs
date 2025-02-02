@@ -1,16 +1,18 @@
+namespace MyApp.Services;
+
 using Microsoft.EntityFrameworkCore;
 using MyApp.Data;
 using MyApp.Models;
-
-namespace MyApp.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public interface IProductService
 {
-    Task<List<Product>> GetAll();
-    Task<Product?> GetById(int id);
-    void Create(Product product);
-    void Edit(Product product);
-    void Delete(Product product);
+    Task<List<Product>> GetAllProductsAsync();
+    Task<Product?> GetProductByIdAsync(int id);
+    Task AddProductAsync(Product product);
+    Task UpdateProductAsync(Product product);
+    Task<bool> DeleteProductAsync(int id);
 
 }
 
@@ -21,33 +23,37 @@ public class ProductService : IProductService
     {
         _dbContext = dbContext;
     }
-    public async Task<List<Product>> GetAll()
+
+    public async Task<List<Product>> GetAllProductsAsync()
     {
-        List<Product> products = await _dbContext.Products.ToListAsync();
-        return products;
+        return await _dbContext.Products.ToListAsync();
     }
 
-    public async Task<Product?> GetById(int id)
+    public async Task<Product?> GetProductByIdAsync(int id)
     {
         return await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-
-    public async void Create(Product product)
+    public async Task AddProductAsync(Product product)
     {
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async void Edit(Product product)
+    public async Task UpdateProductAsync(Product product)
     {
         _dbContext.Products.Update(product);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async void Delete(Product product)
+    public async Task<bool> DeleteProductAsync(int id)
     {
+        var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+        if (product == null)
+            return false;
+
         _dbContext.Products.Remove(product);
         await _dbContext.SaveChangesAsync();
+        return true;
     }
 }

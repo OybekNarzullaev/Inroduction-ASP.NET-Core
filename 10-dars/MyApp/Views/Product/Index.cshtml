@@ -4,18 +4,6 @@
 
 <a asp-action="Create" class="btn btn-primary mt-2">Qo'shish</a>
 
-<h2>Trainsient</h2>
-<h4>@TempData["k11"]</h4>
-<h4>@TempData["k12"]</h4>
-
-<h2>Scoped</h2>
-<h4>@TempData["k21"]</h4>
-<h4>@TempData["k22"]</h4>
-
-<h2>Singleton</h2>
-<h4>@TempData["k31"]</h4>
-<h4>@TempData["k32"]</h4>
-
 <div class="container d-flex justify-content-center flex-wrap my-2">
 @foreach(var product in Model){
     <div class="card" style="width: 18rem;">

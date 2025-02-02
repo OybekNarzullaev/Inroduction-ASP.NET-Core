@@ -1,7 +1,8 @@
 @model MyApp.Models.Product
 
 <h1>Maxsulotni tahrirlash</h1>
-<form method="post" asp-action="Create" class="form">
+<form method="post" asp-action="Edit" class="form">
+    <input type="hidden" asp-for="Id">
     <div class="form-group">
         <label asp-for="Name">Nomi</label>
         <input asp-for="Name" placeholder="Maxsulot nomini kiriting" class="form-control">
