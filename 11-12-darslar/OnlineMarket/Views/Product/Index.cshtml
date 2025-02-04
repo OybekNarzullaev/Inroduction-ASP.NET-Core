@@ -27,7 +27,7 @@
             @if(Model.Products.Count()==0){
                 <h4>Maxsulotlar mavjud emas</h4> 
             }
-            <div class="d-flex gap-3">
+            <div class="d-flex gap-3 flex-wrap">
                 @foreach (var p in Model.Products)
                 {
                     @await Html.PartialAsync("_ProductCart", p)

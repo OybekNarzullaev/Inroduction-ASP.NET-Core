@@ -30,7 +30,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Auth/Login";
-    options.AccessDeniedPath = "/AccessDenied";
+    options.AccessDeniedPath = "/Auth/AccessDenied";
 });
 
 builder.Services.AddScoped<ProductService>();
@@ -40,6 +40,7 @@ builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<CartService>();
 
 var app = builder.Build();
+
 
 await SeedRoles.Initialize(app.Services);
 

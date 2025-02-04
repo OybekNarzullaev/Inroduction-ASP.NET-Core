@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Data;
@@ -12,13 +14,20 @@ public class ProductController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IWebHostEnvironment _environment;
+    private readonly UserManager<User> _userManager;
     private readonly ILogger<ProductController> _logger;
 
-    public ProductController(ApplicationDbContext context, IWebHostEnvironment environment, ILogger<ProductController> logger)
+    public ProductController(
+        ApplicationDbContext context,
+        IWebHostEnvironment environment,
+        UserManager<User> userManager,
+        ILogger<ProductController> logger
+        )
     {
         _context = context;
         _environment = environment;
         _logger = logger;
+        _userManager = userManager;
     }
 
     public async Task<IActionResult> Index([FromQuery] int? category)
@@ -75,6 +84,7 @@ public class ProductController : Controller
                 Price = model.Price,
                 Stock = model.Stock,
                 ImagePath = uniqueFileName,
+                SellerId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 CategoryId = model.CategoryId // Save selected category
             };
 
@@ -112,6 +122,9 @@ public class ProductController : Controller
             return NotFound();
         }
 
+        var user = await _userManager.GetUserAsync(User);
+        if (product.SellerId != user.Id) return Forbid();
+
         var model = new ProductViewModel
         {
             Name = product.Name,
@@ -134,6 +147,9 @@ public class ProductController : Controller
         {
             return NotFound();
         }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (product.SellerId != user.Id) return Forbid();
 
         model.Categories = await _context.Categories.ToListAsync(); // Reload categories
         model.ImagePath = product.ImagePath;
@@ -181,11 +197,14 @@ public class ProductController : Controller
     [Authorize(Roles = "Seller,Admin")]
     public async Task<IActionResult> Delete(int id)
     {
-        var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        Product? product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null)
         {
             return NotFound();
         }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (product.SellerId != user?.Id) return Forbid();
 
         var model = new ProductViewModel
         {
@@ -201,11 +220,14 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> Delete([FromRoute] int id, ProductViewModel model)
     {
+
         var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null)
         {
             return NotFound();
         }
+        var user = await _userManager.GetUserAsync(User);
+        if (product.SellerId != user.Id) return Forbid();
 
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();
@@ -242,4 +264,5 @@ public class ProductController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
 }
