@@ -1,3 +1,3 @@
-# 14 - darslar. Testing va Debugging
+# 14 - dars. Testing va Debugging
 
 ## Amaliyot qismi
