@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copy and restore dependencies
+# Copy project files and restore dependencies
 COPY . ./
 RUN dotnet restore
 RUN dotnet publish -c Release -o /out
@@ -11,6 +11,15 @@ RUN dotnet publish -c Release -o /out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /out .
+
+# Ensure the database directory exists
+RUN mkdir -p /app/Data
+
+# Copy the SQLite database from your project to the container
+COPY --from=build /app/Data/OnlineMarket.db /app/Data/OnlineMarket.db
+
+# Set the connection string to use this path
+ENV ConnectionStrings__DefaultConnection="Data Source=/app/Data/OnlineMarket.db"
 
 # Expose the port your app runs on (default: 80)
 EXPOSE 80
