@@ -19,8 +19,19 @@ builder.Services.AddControllersWithViews();
 
 
 // Add DbContext with SQLite
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteConnection")));
+if (app.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteConnection")));
+
+}
+else
+{
+
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteConnectionProd")));
+
+}
 
 
 builder.Services.AddIdentity<User, IdentityRole>()
