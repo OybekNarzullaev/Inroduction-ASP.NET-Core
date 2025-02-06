@@ -9,23 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// // Add DbContext with MySQL
-// var conectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//     options.UseMySql(
-//        conectionString,
-//         ServerVersion.AutoDetect(conectionString))
-//     );
-
 
 // Add DbContext with SQLite
-
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteConnectionProd")));
-
-
-
+    options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteConnection")));
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
